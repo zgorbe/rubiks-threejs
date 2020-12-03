@@ -1,0 +1,22 @@
+{
+  "name": "rubik-threejs",
+  "version": "1.0.0",
+  "description": "Rubik's cube with three.js",
+  "private": true,
+  "scripts": {
+    "watch": "watch 'npm run build' src",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
+  },
+  "author": "Zoltan Gorbe",
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.12.3",
+    "three": "^0.123.0"
+  },
+  "devDependencies": {
+    "watch": "^1.0.2",
+    "webpack": "^5.9.0",
+    "webpack-cli": "^4.2.0"
+  }
+}
