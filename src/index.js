@@ -40,16 +40,11 @@ const render = () => {
   if (mouse.x !== 0 && mouse.y !== 0) {
     raycaster.setFromCamera(mouse, camera);
     // calculate objects intersecting the picking ray
-    //const intersects = raycaster.intersectObjects(scene.children);
+    const intersects = raycaster.intersectObjects(cube.children);
 
-    /*if (intersects.length) {
-      const instanceId = intersects[0].instanceId;
-      console.log(instanceId);
-    }*/
-    const intersects = [];
-    cube.raycast(raycaster, intersects);
     if (intersects.length) {
-      console.log(intersects)
+      // const instanceId = intersects[0].instanceId;
+      console.log(intersects.map(item => item.object.position));
     }
   }
   renderer.render(scene, camera);
