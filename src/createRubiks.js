@@ -5,7 +5,6 @@ import {
   MeshBasicMaterial,
 } from 'three';
 
-
 export const createRubiks = () => {
   const geometry = new BoxBufferGeometry(0.98, 0.98, 0.98);
   const materials =
@@ -29,8 +28,4 @@ export const createRubiks = () => {
   }
 
   return mesh;
-};
-
-export const rotateCubes = cube => {
-  cube.instanceMatrix.needsUpdate = true;
 };
