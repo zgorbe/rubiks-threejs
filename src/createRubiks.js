@@ -5,53 +5,15 @@ import {
   MeshBasicMaterial,
 } from 'three';
 
-// for 3x3x3 cube only :(
-const visibleCubeFaces = [
-  // Back
-  [1, 3, 5],
-  [3, 5],
-  [0, 3, 5],
-  [1, 5],
-  [5],
-  [0, 5],
-  [1, 2, 5],
-  [2, 5],
-  [0, 2, 5],
-  // Center
-  [1, 3],
-  [3],
-  [0, 3],
-  [1],
-  [],
-  [0],
-  [1, 2],
-  [2],
-  [0, 2],
-  // Front
-  [1, 3, 4],
-  [3, 4],
-  [0, 3, 4],
-  [1, 4],
-  [4],
-  [0, 4],
-  [1, 2, 4],
-  [2, 4],
-  [0, 2, 4],
-];
-
+import { getVisibleCubeFaces } from './rubikUtils';
 
 const getMaterials = (size, cubeIndex) => {
-  if (size === 3) {
-    const visibleFaces = visibleCubeFaces[cubeIndex];
-    // red, orange, white, yellow, green, blue
-    return [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad].map(
-      (color, index) =>
-        new MeshBasicMaterial({ color: visibleFaces ? visibleFaces.includes(index) ? color : 0x222222 : color })
-    );
-  }
-
+  const visibleCubeFaces = getVisibleCubeFaces(size);
+  const faces = visibleCubeFaces[cubeIndex];
+  // red, orange, white, yellow, green, blue
   return [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad].map(
-    color => new MeshBasicMaterial({ color })
+    (color, index) =>
+      new MeshBasicMaterial({ color: faces.includes(index) ? color : 0x222222 })
   );
 };
 
