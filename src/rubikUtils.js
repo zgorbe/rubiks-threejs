@@ -10,8 +10,8 @@ const isOnSameFace = (vectorA, vectorB) => {
 
 
 export const getFaceToRotate = (cube, orbitControls, startObject, endObject) => {
-  const { position: startPosition } = startObject;
-  const { position: endPosition } = endObject;
+  const startPosition = startObject.position.round();
+  const endPosition = endObject.position.round();
 
   if (!startPosition.equals(endPosition) && isOnSameFace(startPosition, endPosition)) {
     console.log(startPosition);
@@ -20,7 +20,7 @@ export const getFaceToRotate = (cube, orbitControls, startObject, endObject) => 
     console.log(orbitControls.getAzimuthalAngle() * 180 / Math.PI);
     console.log(orbitControls.getPolarAngle() * 180 / Math.PI);
 
-    return cube.children.filter(child => child.position.y === 0);
+    return cube.children.filter(child => child.position.x === 1);
   }
 
   return null;

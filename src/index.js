@@ -12,20 +12,18 @@ import {
   Vector3,
 } from 'three';
 
-const [scene, camera, renderer, controls] = initScene();
+const SIZE = 3;
+const [scene, camera, renderer, controls] = initScene(SIZE);
 
-const cube = createRubiks();
+const cube = createRubiks(SIZE);
 
 // add cube to scene
 scene.add(cube);
 
-
-// mouse and raycaster
+// stuff needed for rotating the cube
 const mouse = new Vector2();
 const mouseStart = new Vector2();
 const raycaster = new Raycaster();
-
-// stuff needed for rotating the cube
 const targetQuaternion = new Quaternion();
 const clock = new Clock();
 const rotatingSpeed = 2;
@@ -73,7 +71,7 @@ window.addEventListener('mouseup', () => {
       isRotating = true;
       rotatorObject.quaternion.identity();
       face.forEach(f => rotatorObject.attach(f));
-      targetQuaternion.setFromAxisAngle(new Vector3(0, 1, 0), Math.PI / 2);
+      targetQuaternion.setFromAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
     }
   }
 
@@ -89,11 +87,7 @@ window.addEventListener('mousemove', () => {
     raycaster.setFromCamera(mouse, camera);
     let intersects = raycaster.intersectObjects(cube.children);
 
-    if (intersects.length) {
-      controls.enabled = false;
-    } else {
-      controls.enabled = true;
-    }
+    controls.enabled = !intersects.length;
   }
 });
 
