@@ -21,8 +21,6 @@ const cube = createRubiks(SIZE);
 scene.add(cube);
 
 // stuff needed for rotating the cube
-const mouse = new Vector2();
-const mouseStart = new Vector2();
 const raycaster = new Raycaster();
 const targetQuaternion = new Quaternion();
 const clock = new Clock();
@@ -31,10 +29,11 @@ const rotatorObject = new Object3D();
 scene.add(rotatorObject);
 
 let isRotating = false;
+let startObject;
 
-const getSelectedObject = mouse => {
-  if (mouse && mouse.x !== 0 && mouse.y !== 0) {
-    raycaster.setFromCamera(mouse, camera);
+const getSelectedObject = mouseVector => {
+  if (mouseVector && mouseVector.x !== 0 && mouseVector.y !== 0) {
+    raycaster.setFromCamera(mouseVector, camera);
     let intersects = raycaster.intersectObjects(cube.children);
 
     if (intersects.length) {
@@ -45,15 +44,22 @@ const getSelectedObject = mouse => {
   return null;
 };
 
-window.addEventListener('mousedown', () => {
+controls.domElement.addEventListener('pointerdown', event => {
   if (isRotating) {
     return;
   }
+
+  const mouseStart = new Vector2();
   mouseStart.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouseStart.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+  if (mouseStart.x !== 0 && mouseStart.y !== 0) {
+    startObject = getSelectedObject(mouseStart);
+    controls.enabled = !startObject;
+  }
 });
 
-window.addEventListener('mouseup', () => {
+controls.domElement.addEventListener('pointerup', event => {
   if (isRotating) {
     return;
   }
@@ -62,7 +68,6 @@ window.addEventListener('mouseup', () => {
   mouseEnd.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouseEnd.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
-  const startObject = getSelectedObject(mouseStart);
   const endObject = getSelectedObject(mouseEnd);
 
   if (startObject && endObject) {
@@ -75,20 +80,7 @@ window.addEventListener('mouseup', () => {
     }
   }
 
-  mouseStart.x = 0;
-  mouseStart.y = 0;
-});
-
-window.addEventListener('mousemove', () => {
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  if (mouse.x !== 0 && mouse.y !== 0) {
-    raycaster.setFromCamera(mouse, camera);
-    let intersects = raycaster.intersectObjects(cube.children);
-
-    controls.enabled = !intersects.length;
-  }
+  controls.enabled = true;
 });
 
 // handle window resize

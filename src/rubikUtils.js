@@ -25,6 +25,7 @@ export const getFaceToRotate = (cube, orbitControls, startObject, endObject) => 
   return null;
 };
 
+// TODO: investigate if this could be done in a simpler way
 export const getVisibleCubeFaces = size => {
   const faces = [];
 
