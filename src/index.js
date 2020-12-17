@@ -44,31 +44,37 @@ const getSelectedObject = mouseVector => {
   return null;
 };
 
-controls.domElement.addEventListener('pointerdown', event => {
+const getEventVector = event => {
+  const eventVector = new Vector2();
+  const eventObj =
+    event.changedTouches && event.changedTouches.length ? event.changedTouches[0] : event;
+
+  eventVector.x = (eventObj.clientX / window.innerWidth) * 2 - 1;
+  eventVector.y = -(eventObj.clientY / window.innerHeight) * 2 + 1;
+  return eventVector;
+};
+
+const handleStartEvent = event => {
   if (isRotating) {
     return;
   }
 
-  const mouseStart = new Vector2();
-  mouseStart.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouseStart.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  if (mouseStart.x !== 0 && mouseStart.y !== 0) {
-    startObject = getSelectedObject(mouseStart);
+  const startVector = getEventVector(event);
+  if (startVector.x !== 0 && startVector.y !== 0) {
+    startObject = getSelectedObject(startVector);
     controls.enabled = !startObject;
   }
-});
+};
+controls.domElement.addEventListener('pointerdown', handleStartEvent);
+controls.domElement.addEventListener('touchstart', handleStartEvent);
 
-controls.domElement.addEventListener('pointerup', event => {
+const handleEndEvent = event => {
   if (isRotating) {
     return;
   }
 
-  const mouseEnd = new Vector2();
-  mouseEnd.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouseEnd.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-  const endObject = getSelectedObject(mouseEnd);
+  const endVector = getEventVector(event);
+  const endObject = getSelectedObject(endVector);
 
   if (startObject && endObject) {
     const face = getFaceToRotate(cube, controls, startObject, endObject);
@@ -81,7 +87,9 @@ controls.domElement.addEventListener('pointerup', event => {
   }
 
   controls.enabled = true;
-});
+};
+controls.domElement.addEventListener('pointerup', handleEndEvent);
+controls.domElement.addEventListener('touchend', handleEndEvent);
 
 // handle window resize
 window.addEventListener('resize', debounce(() => {
