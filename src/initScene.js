@@ -23,6 +23,8 @@ const initScene = (size = 3) => {
 
   // orbiting camera with mouse
   const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enablePan = false;
+  controls.enableZoom = false;
   controls.update();
 
   // coordinate system axes: X - red, Y - green, Z - blue

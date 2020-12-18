@@ -110,8 +110,10 @@ const render = () => {
     const step = rotatingSpeed * delta;
     rotatorObject.quaternion.rotateTowards(targetQuaternion, step);
   } else {
-    rotatorObject.children.forEach(child => cube.attach(child));
-    isRotating = false;
+    if (rotatorObject.children.length) {
+      rotatorObject.children.forEach(child => cube.attach(child));
+      isRotating = false;
+    }
   }
 
   renderer.render(scene, camera);
