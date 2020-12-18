@@ -17,7 +17,7 @@ const getMaterials = (size, cubeIndex) => {
   );
 };
 
-export const createRubiks = (size = 3) => {
+export const createRubiks = size => {
   const geometry = new BoxBufferGeometry(0.96, 0.96, 0.96);
 
   const mesh = new Group();

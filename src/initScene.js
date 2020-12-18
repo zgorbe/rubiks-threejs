@@ -8,7 +8,7 @@ import {
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-const initScene = (size = 3) => {
+const initScene = size => {
   const scene = new Scene();
   const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   camera.position.set(size, size, size * 2);

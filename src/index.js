@@ -2,6 +2,7 @@ import { createRubiks } from './createRubiks';
 import initScene from './initScene';
 import { debounce } from './utils';
 import { getFaceToRotate } from './rubikUtils';
+import { initHtmlControls } from './initHtmlControls';
 
 import {
   Clock,
@@ -12,9 +13,10 @@ import {
   Vector3,
 } from 'three';
 
-const SIZE = 3;
-const [scene, camera, renderer, controls] = initScene(SIZE);
+initHtmlControls();
 
+const SIZE = new URLSearchParams(window.location.search).get('size');
+const [scene, camera, renderer, controls] = initScene(SIZE);
 const cube = createRubiks(SIZE);
 
 // add cube to scene
@@ -60,10 +62,8 @@ const handleStartEvent = event => {
   }
 
   const startVector = getEventVector(event);
-  if (startVector.x !== 0 && startVector.y !== 0) {
-    startObject = getSelectedObject(startVector);
-    controls.enabled = !startObject;
-  }
+  startObject = getSelectedObject(startVector);
+  controls.enabled = !startObject;
 };
 controls.domElement.addEventListener('pointerdown', handleStartEvent);
 controls.domElement.addEventListener('touchstart', handleStartEvent);
