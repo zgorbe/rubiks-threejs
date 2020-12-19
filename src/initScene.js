@@ -1,4 +1,7 @@
 import {
+  Audio,
+  AudioListener,
+  AudioLoader,
   AxesHelper,
   Color,
   PerspectiveCamera,
@@ -31,7 +34,15 @@ const initScene = size => {
   // const axesHelper = new AxesHelper(5);
   // scene.add(axesHelper);
 
-  return [scene, camera, renderer, controls];
+  const listener = new AudioListener();
+  const sound = new Audio(listener);
+  const audioLoader = new AudioLoader();
+  audioLoader.load('sounds/rotate.wav', function(buffer) {
+    sound.setBuffer(buffer);
+    sound.setVolume(0.5);
+  });
+
+  return [scene, camera, renderer, controls, sound];
 };
 
 export default initScene;

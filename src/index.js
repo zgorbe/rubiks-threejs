@@ -16,7 +16,7 @@ import {
 initHtmlControls();
 
 const SIZE = new URLSearchParams(window.location.search).get('size');
-const [scene, camera, renderer, controls] = initScene(SIZE);
+const [scene, camera, renderer, controls, sound] = initScene(SIZE);
 const cube = createRubiks(SIZE);
 
 // add cube to scene
@@ -83,6 +83,7 @@ const handleEndEvent = event => {
       rotatorObject.quaternion.identity();
       face.forEach(f => rotatorObject.attach(f));
       targetQuaternion.setFromAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
+      sound.play();
     }
   }
 
