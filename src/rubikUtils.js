@@ -1,27 +1,57 @@
-const isOnSameFace = (vectorA, vectorB) => {
-  let delta = 0;
+import { Vector3 } from 'three';
 
-  if (vectorA.x !== vectorB.x) delta++;
-  if (vectorA.y !== vectorB.y) delta++;
-  if (vectorA.z !== vectorB.z) delta++;
-
-  return delta === 1;
+const FACE_TO_AXIS_MAP = {
+  y: 'x',
+  x: 'y',
+  z: 'x', // TODO: handle z properly
 };
 
-export const getFaceToRotate = (cube, orbitControls, startObject, endObject) => {
+const UNIT_VECTORS = {
+  x: new Vector3(1, 0, 0),
+  y: new Vector3(0, 1, 0),
+  z: new Vector3(0, 0, 1),
+};
+
+const DIRECTIONS = {
+  x: -1,
+  y: 1,
+  z: -1, // TODO: handle z properly
+};
+
+const getDeltaList = (vectorA, vectorB) => {
+  let delta = [];
+
+  if (vectorA.x !== vectorB.x) delta.push('x');
+  if (vectorA.y !== vectorB.y) delta.push('y');
+  if (vectorA.z !== vectorB.z) delta.push('z');
+
+  return delta;
+};
+
+const getDirection = (startPosition, endPosition, delta) => {
+  return DIRECTIONS[delta] * (startPosition[delta] - endPosition[delta] > 0 ? 1 : -1);
+};
+
+export const getRotationDetails = (cube, orbitControls, startObject, endObject) => {
   const startPosition = startObject.position.round();
   const endPosition = endObject.position.round();
 
-  if (!startPosition.equals(endPosition) && isOnSameFace(startPosition, endPosition)) {
-    console.log(startPosition);
-    console.log(endPosition);
+  if (!startPosition.equals(endPosition)) {
+    const deltaList = getDeltaList(startPosition, endPosition);
 
-    console.log(orbitControls.getAzimuthalAngle() * 180 / Math.PI);
-    console.log(orbitControls.getPolarAngle() * 180 / Math.PI);
+    // if start and end objects are on same face
+    if (deltaList.length === 1) {
+      console.log(orbitControls.getAzimuthalAngle() * 180 / Math.PI);
+      console.log(orbitControls.getPolarAngle() * 180 / Math.PI);
 
-    return cube.children.filter(child => child.position.x === 1);
+      const axis = FACE_TO_AXIS_MAP[deltaList[0]];
+      return {
+        axis: UNIT_VECTORS[axis],
+        face: cube.children.filter(child => child.position.round()[axis] === startPosition[axis]),
+        direction: getDirection(startPosition, endPosition, deltaList[0])
+      };
+    }
   }
-
   return null;
 };
 

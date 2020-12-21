@@ -1,7 +1,7 @@
 import { createRubiks } from './createRubiks';
 import initScene from './initScene';
 import { debounce } from './utils';
-import { getFaceToRotate } from './rubikUtils';
+import { getRotationDetails } from './rubikUtils';
 import { initHtmlControls } from './initHtmlControls';
 
 import {
@@ -77,12 +77,13 @@ const handleEndEvent = event => {
   const endObject = getSelectedObject(endVector);
 
   if (startObject && endObject) {
-    const face = getFaceToRotate(cube, controls, startObject, endObject);
-    if (face) {
+    const rotationDetails = getRotationDetails(cube, controls, startObject, endObject);
+    if (rotationDetails) {
+      const { axis, face, direction } = rotationDetails;
       isRotating = true;
       rotatorObject.quaternion.identity();
       face.forEach(f => rotatorObject.attach(f));
-      targetQuaternion.setFromAxisAngle(new Vector3(1, 0, 0), Math.PI / 2);
+      targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
       sound.play();
     }
   }
