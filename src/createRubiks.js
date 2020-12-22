@@ -7,13 +7,16 @@ import {
 
 import { getVisibleCubeFaces } from './rubikUtils';
 
+// red, orange, white, yellow, green, blue
+const COLORS = [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad];
+const INSIDE_COLOR = 0x222222;
+
 const getMaterials = (size, cubeIndex) => {
   const visibleCubeFaces = getVisibleCubeFaces(size);
   const faces = visibleCubeFaces[cubeIndex];
-  // red, orange, white, yellow, green, blue
-  return [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad].map(
+  return COLORS.map(
     (color, index) =>
-      new MeshBasicMaterial({ color: faces.includes(index) ? color : 0x222222 })
+      new MeshBasicMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR })
   );
 };
 
