@@ -12,10 +12,10 @@ const UNIT_VECTORS = {
   z: new Vector3(0, 0, 1),
 };
 
-const DIRECTIONS = {
-  x: -1,
-  y: 1,
-  z: -1, // TODO: handle z properly
+const DIRECTIONS_MAP = {
+  x: [-1, 1],
+  y: [1, -1],
+  z: [-1, 1]
 };
 
 const getDeltaList = (vectorA, vectorB) => {
@@ -33,8 +33,11 @@ const getAxisToRotate = (deltaAxis, orbitHorizontal) => {
   return Math.abs(orbitHorizontal) < 45 || Math.abs(orbitHorizontal) > 135 ? axles[0] : axles[1];
 };
 
-const getDirection = (startPosition, endPosition, delta) => {
-  return DIRECTIONS[delta] * (startPosition[delta] - endPosition[delta] > 0 ? 1 : -1);
+const getDirection = (startPosition, endPosition, delta, orbitHorizontal) => {
+  const directions = DIRECTIONS_MAP[delta];
+  const direction = -135 < orbitHorizontal && orbitHorizontal < 45 ? directions[0] : directions[1];
+
+  return direction * (startPosition[delta] - endPosition[delta] > 0 ? 1 : -1);
 };
 
 export const getRotationDetails = (cube, orbitControls, startObject, endObject) => {
@@ -49,14 +52,14 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
       const orbitHorizontal = orbitControls.getAzimuthalAngle() * 180 / Math.PI;
       const orbitVertical = orbitControls.getPolarAngle() * 180 / Math.PI;
       console.log(orbitHorizontal);
-      console.log(orbitVertical);
+      // console.log(orbitVertical);
 
       const deltaAxis = deltaList[0];
       const axisToRotate = getAxisToRotate(deltaAxis, orbitHorizontal);
       return {
         axis: UNIT_VECTORS[axisToRotate],
         face: cube.children.filter(child => child.position.round()[axisToRotate] === startPosition[axisToRotate]),
-        direction: getDirection(startPosition, endPosition, deltaAxis)
+        direction: getDirection(startPosition, endPosition, deltaAxis, orbitHorizontal)
       };
     }
   }
