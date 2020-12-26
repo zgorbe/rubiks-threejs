@@ -28,6 +28,7 @@ const getDeltaList = (vectorA, vectorB) => {
   return delta;
 };
 
+// TODO: review and implement a better solution for rotations
 const getAxisToRotate = (deltaAxis, orbitHorizontal) => {
   const axles = AXIS_TO_ROTATE_MAP[deltaAxis];
   return Math.abs(orbitHorizontal) < 45 || Math.abs(orbitHorizontal) > 135 ? axles[0] : axles[1];
@@ -50,10 +51,6 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
     // if start and end objects are on same face
     if (deltaList.length === 1) {
       const orbitHorizontal = orbitControls.getAzimuthalAngle() * 180 / Math.PI;
-      const orbitVertical = orbitControls.getPolarAngle() * 180 / Math.PI;
-      console.log(orbitHorizontal);
-      // console.log(orbitVertical);
-
       const deltaAxis = deltaList[0];
       const axisToRotate = getAxisToRotate(deltaAxis, orbitHorizontal);
       return {

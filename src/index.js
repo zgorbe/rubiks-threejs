@@ -10,7 +10,6 @@ import {
   Quaternion,
   Raycaster,
   Vector2,
-  Vector3,
 } from 'three';
 
 initHtmlControls();
