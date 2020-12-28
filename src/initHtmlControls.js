@@ -2,10 +2,11 @@ import { getScrambleRotation } from './rubikUtils';
 
 const DEFAULT_CUBE_SIZE = 3;
 const SCRAMBLE_COUNT = 50;
-const SCRAMBLE_TIMEOUT = 250;
+const SCRAMBLE_TIMEOUT = 300;
 
 const handleScrambleClick = (cube, handleScrambleRotation) => {
   const overlay = document.getElementById('scramble-overlay');
+  const scrambleCounter = document.getElementById('scramble-counter');
   const queryParams = new URLSearchParams(window.location.search);
   const size = queryParams.get('size');
 
@@ -27,6 +28,7 @@ const handleScrambleClick = (cube, handleScrambleRotation) => {
     } else {
       overlay.style.display = 'none';
     }
+    scrambleCounter.innerText = `${counter} of ${SCRAMBLE_COUNT} steps`;
   };
 
   doRotation();
