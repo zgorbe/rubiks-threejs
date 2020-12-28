@@ -38,7 +38,6 @@ const initScene = size => {
   const sound = new Audio(listener);
   const audioLoader = new AudioLoader();
   const wavUrl = `${window.location.origin}${window.location.pathname}sounds/rotate.wav`;
-  console.log(wavUrl);
   audioLoader.load(wavUrl, function(buffer) {
     sound.setBuffer(buffer);
     sound.setVolume(0.5);

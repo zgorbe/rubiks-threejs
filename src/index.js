@@ -25,7 +25,7 @@ scene.add(cube);
 // handle scrambling
 let isScrambling = false;
 let scrambleRotation = null;
-const scramblingSpeed = 40;
+const scramblingSpeed = 20;
 initHtmlControls(cube, function handleScrambleRotation(rotation, isLastRotation) {
   scrambleRotation = rotation;
   isScrambling = !isLastRotation;

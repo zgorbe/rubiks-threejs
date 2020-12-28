@@ -1,14 +1,15 @@
 import { getScrambleRotation } from './rubikUtils';
 
 const DEFAULT_CUBE_SIZE = 3;
-const SCRAMBLE_COUNT = 50;
-const SCRAMBLE_TIMEOUT = 300;
+const SCRAMBLE_TIMEOUT = 200;
 
 const handleScrambleClick = (cube, handleScrambleRotation) => {
   const overlay = document.getElementById('scramble-overlay');
   const scrambleCounter = document.getElementById('scramble-counter');
   const queryParams = new URLSearchParams(window.location.search);
   const size = queryParams.get('size');
+  const cubeChildrenLength = Math.pow(size, 3);
+  const scrambleCount = size < 5 ? 50 : 100;
 
   overlay.style.display = 'block';
   let counter = 0;
@@ -18,17 +19,24 @@ const handleScrambleClick = (cube, handleScrambleRotation) => {
       handleScrambleRotation(null, false);
       return;
     }
+
+    // if reattaching of the rotated cube face is not yet ready then reschedule rotation
+    if (cube.children.length !== cubeChildrenLength) {
+      setTimeout(doRotation, SCRAMBLE_TIMEOUT);
+      return;
+    }
+
     const rotation = getScrambleRotation(cube, size);
-    handleScrambleRotation(rotation, counter === SCRAMBLE_COUNT);
+    handleScrambleRotation(rotation, counter === scrambleCount);
 
     // TODO: investigate if this timeout based scrambling could be replaced with a more robust one
-    if (counter < SCRAMBLE_COUNT) {
+    if (counter < scrambleCount) {
       setTimeout(doRotation, SCRAMBLE_TIMEOUT);
       counter++;
     } else {
       overlay.style.display = 'none';
     }
-    scrambleCounter.innerText = `${counter} of ${SCRAMBLE_COUNT} steps`;
+    scrambleCounter.innerText = `${counter} of ${scrambleCount} steps`;
   };
 
   doRotation();
