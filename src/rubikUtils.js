@@ -1,5 +1,7 @@
 import { Vector3 } from 'three';
 
+const AXLES = ['x', 'y', 'z'];
+
 const AXIS_TO_ROTATE_MAP = {
   x: ['y', 'z'],
   y: ['x', 'z'],
@@ -61,6 +63,18 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
     }
   }
   return null;
+};
+
+export const getScrambleRotation = (cube, size) => {
+  const axisToRotate = AXLES[Math.floor(Math.random() * Math.floor(3))];
+  const layer = Math.floor(Math.random() * Math.floor(size));
+  const direction = Math.floor(Math.random() * Math.floor(2)) ? 1 : -1;
+
+  return {
+    axis: UNIT_VECTORS[axisToRotate],
+    face: cube.children.filter(child => child.position.round()[axisToRotate] === layer),
+    direction
+  };
 };
 
 // TODO: investigate if this could be done in a simpler way

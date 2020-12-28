@@ -2,7 +2,7 @@ import { createRubiks } from './createRubiks';
 import initScene from './initScene';
 import { debounce } from './utils';
 import { getRotationDetails } from './rubikUtils';
-import { initHtmlControls } from './initHtmlControls';
+import { initHtmlControls, initSizeParameter } from './initHtmlControls';
 
 import {
   Clock,
@@ -12,7 +12,8 @@ import {
   Vector2,
 } from 'three';
 
-initHtmlControls();
+// initialization
+initSizeParameter();
 
 const SIZE = new URLSearchParams(window.location.search).get('size');
 const [scene, camera, renderer, controls, sound] = initScene(SIZE);
@@ -20,6 +21,15 @@ const cube = createRubiks(SIZE);
 
 // add cube to scene
 scene.add(cube);
+
+// handle scrambling
+let isScrambling = false;
+let scrambleRotation = null;
+const scramblingSpeed = 25;
+initHtmlControls(cube, function handleScrambleRotation(rotation, isLastRotation) {
+  scrambleRotation = rotation;
+  isScrambling = !isLastRotation;
+});
 
 // stuff needed for rotating the cube
 const raycaster = new Raycaster();
@@ -108,13 +118,21 @@ const render = () => {
   const delta = clock.getDelta();
 
   if (!rotatorObject.quaternion.equals(targetQuaternion)) {
-    const step = rotatingSpeed * delta;
+    const step = (isScrambling ? scramblingSpeed : rotatingSpeed) * delta;
     rotatorObject.quaternion.rotateTowards(targetQuaternion, step);
   } else {
     if (rotatorObject.children.length) {
       rotatorObject.children.forEach(child => cube.attach(child));
       isRotating = false;
     }
+  }
+
+  if (scrambleRotation) {
+    const { axis, face, direction } = scrambleRotation;
+    rotatorObject.quaternion.identity();
+    face.forEach(f => rotatorObject.attach(f));
+    targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
+    scrambleRotation = null;
   }
 
   renderer.render(scene, camera);
