@@ -18,6 +18,7 @@ initSizeParameter();
 const SIZE = new URLSearchParams(window.location.search).get('size');
 const [scene, camera, renderer, controls, sound] = initScene(SIZE);
 const cube = createRubiks(SIZE);
+const CUBE_CHILDREN_COUNT = cube.children.length;
 
 // add cube to scene
 scene.add(cube);
@@ -95,6 +96,7 @@ const handleEndEvent = event => {
       targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
       sound.play();
     }
+    startObject = null;
   }
 
   controls.enabled = true;
@@ -123,8 +125,11 @@ const render = () => {
   } else {
     if (rotatorObject.children.length) {
       rotatorObject.children.forEach(child => cube.attach(child));
-      isRotating = false;
     }
+  }
+
+  if (cube.children.length === CUBE_CHILDREN_COUNT) {
+    isRotating = false;
   }
 
   if (scrambleRotation) {
