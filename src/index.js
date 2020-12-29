@@ -1,7 +1,7 @@
 import { createRubiks } from './createRubiks';
 import initScene from './initScene';
 import { debounce } from './utils';
-import { getRotationDetails } from './rubikUtils';
+import { getRotationDetails, getScrambleRotation } from './rubikUtils';
 import { initHtmlControls, initSizeParameter } from './initHtmlControls';
 
 import {
@@ -24,12 +24,18 @@ const CUBE_CHILDREN_COUNT = cube.children.length;
 scene.add(cube);
 
 // handle scrambling
-let isScrambling = false;
-let scrambleRotation = null;
-const scramblingSpeed = 20;
-initHtmlControls(cube, function handleScrambleRotation(rotation, isLastRotation) {
-  scrambleRotation = rotation;
-  isScrambling = !isLastRotation;
+const scrambleInfo = {
+  isScrambling: false,
+  scramblingSpeed: 20,
+  scrambleCount: SIZE < 5 ? 50 : 100,
+  scrambleStep: 0,
+  overlay: document.getElementById('scramble-overlay'),
+  counterText: document.getElementById('scramble-counter')
+};
+
+initHtmlControls(function handleScrambleClick() {
+  scrambleInfo.overlay.style.display = 'block';
+  scrambleInfo.isScrambling = true;
 });
 
 // stuff needed for rotating the cube
@@ -42,6 +48,14 @@ scene.add(rotatorObject);
 
 let isRotating = false;
 let startObject;
+
+const scheduleRotation = rotation => {
+  const { axis, face, direction } = rotation;
+  isRotating = true;
+  rotatorObject.quaternion.identity();
+  face.forEach(f => rotatorObject.attach(f));
+  targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
+};
 
 const getSelectedObject = mouseVector => {
   if (mouseVector && mouseVector.x !== 0 && mouseVector.y !== 0) {
@@ -89,11 +103,7 @@ const handleEndEvent = event => {
   if (startObject && endObject) {
     const rotationDetails = getRotationDetails(cube, controls, startObject, endObject);
     if (rotationDetails) {
-      const { axis, face, direction } = rotationDetails;
-      isRotating = true;
-      rotatorObject.quaternion.identity();
-      face.forEach(f => rotatorObject.attach(f));
-      targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
+      scheduleRotation(rotationDetails);
       sound.play();
     }
     startObject = null;
@@ -111,6 +121,20 @@ window.addEventListener('resize', debounce(() => {
   renderer.setSize(window.innerWidth, window.innerHeight);
 }));
 
+const handleScrambling = () => {
+  const { overlay, scrambleCount, counterText } = scrambleInfo;
+  if (scrambleInfo.isScrambling && !isRotating) {
+    if (scrambleInfo.scrambleStep++ < scrambleCount) {
+      scheduleRotation(getScrambleRotation(cube, SIZE));
+    } else {
+      overlay.style.display = 'none';
+      scrambleInfo.isScrambling = false;
+      scrambleInfo.scrambleStep = 0;
+    }
+    counterText.innerText = `${scrambleInfo.scrambleStep} of ${scrambleCount} steps`;
+  }
+};
+
 // render
 const render = () => {
   requestAnimationFrame(render);
@@ -120,7 +144,7 @@ const render = () => {
   const delta = clock.getDelta();
 
   if (!rotatorObject.quaternion.equals(targetQuaternion)) {
-    const step = (isScrambling ? scramblingSpeed : rotatingSpeed) * delta;
+    const step = (scrambleInfo.isScrambling ? scrambleInfo.scramblingSpeed : rotatingSpeed) * delta;
     rotatorObject.quaternion.rotateTowards(targetQuaternion, step);
   } else {
     if (rotatorObject.children.length) {
@@ -132,13 +156,7 @@ const render = () => {
     isRotating = false;
   }
 
-  if (scrambleRotation) {
-    const { axis, face, direction } = scrambleRotation;
-    rotatorObject.quaternion.identity();
-    face.forEach(f => rotatorObject.attach(f));
-    targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
-    scrambleRotation = null;
-  }
+  handleScrambling();
 
   renderer.render(scene, camera);
 };
