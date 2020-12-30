@@ -4,9 +4,9 @@ import {
   Quaternion
 } from 'three';
 
-import { getScrambleRotation, getSizeParameter } from './rubikUtils';
+import { getCubeSize, getScrambleRotation } from './rubikUtils';
 
-const SIZE = getSizeParameter();
+const SIZE = getCubeSize();
 const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3);
 const clock = new Clock();
 
@@ -49,7 +49,6 @@ export const doRotate = cube => {
       rotatorObject.children.forEach(child => cube.attach(child));
     }
   }
-
   if (cube.children.length === CUBE_CHILDREN_LENGTH) {
     rotateInfo.isRotating = false;
   }

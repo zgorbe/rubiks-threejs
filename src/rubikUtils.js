@@ -149,7 +149,7 @@ export const getVisibleCubeFaces = size => {
   return faces;
 }
 
-export const getSizeParameter = () => {
+export const getCubeSize = () => {
   const queryParams = new URLSearchParams(window.location.search);
   const sizeSelector = document.getElementById('size-select');
 
@@ -162,5 +162,5 @@ export const getSizeParameter = () => {
     history.replaceState(null, null, `?${queryParams.toString()}`);
   }
 
-  return size;
+  return size || DEFAULT_CUBE_SIZE;
 };
