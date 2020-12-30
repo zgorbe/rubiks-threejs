@@ -28,7 +28,6 @@ const initScene = size => {
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enablePan = false;
   controls.enableZoom = false;
-  controls.update();
 
   // coordinate system axes: X - red, Y - green, Z - blue
   // const axesHelper = new AxesHelper(5);

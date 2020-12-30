@@ -1,5 +1,7 @@
 import { Vector3 } from 'three';
 
+const DEFAULT_CUBE_SIZE = 3;
+
 const AXLES = ['x', 'y', 'z'];
 
 const AXIS_TO_ROTATE_MAP = {
@@ -146,3 +148,19 @@ export const getVisibleCubeFaces = size => {
 
   return faces;
 }
+
+export const getSizeParameter = () => {
+  const queryParams = new URLSearchParams(window.location.search);
+  const sizeSelector = document.getElementById('size-select');
+
+  const size = queryParams.get('size');
+  if (size) {
+    sizeSelector.value = size;
+  } else {
+    queryParams.set('size', DEFAULT_CUBE_SIZE);
+    sizeSelector.value = DEFAULT_CUBE_SIZE;
+    history.replaceState(null, null, `?${queryParams.toString()}`);
+  }
+
+  return size;
+};
