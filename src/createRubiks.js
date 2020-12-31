@@ -2,7 +2,7 @@ import {
   BoxBufferGeometry,
   Group,
   Mesh,
-  MeshBasicMaterial,
+  MeshPhongMaterial,
 } from 'three';
 
 import { getCubeSize, getVisibleCubeFaces } from './rubikUtils';
@@ -17,7 +17,7 @@ const getMaterials = cubeIndex => {
   const faces = visibleCubeFaces[cubeIndex];
   return COLORS.map(
     (color, index) =>
-      new MeshBasicMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR })
+      new MeshPhongMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR })
   );
 };
 

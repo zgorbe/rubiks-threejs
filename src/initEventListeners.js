@@ -22,6 +22,8 @@ export const initHtmlControls = () => {
 };
 
 export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
+  let startObject;
+
   const getSelectedObject = mouseVector => {
     if (mouseVector && mouseVector.x !== 0 && mouseVector.y !== 0) {
       raycaster.setFromCamera(mouseVector, camera);
@@ -51,8 +53,8 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
     }
 
     const startVector = getEventVector(event);
-    rotateInfo.startObject = getSelectedObject(startVector);
-    controls.enabled = !rotateInfo.startObject;
+    startObject = getSelectedObject(startVector);
+    controls.enabled = !startObject;
   };
   controls.domElement.addEventListener('pointerdown', handleStartEvent);
   controls.domElement.addEventListener('touchstart', handleStartEvent);
@@ -65,13 +67,13 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
     const endVector = getEventVector(event);
     const endObject = getSelectedObject(endVector);
 
-    if (rotateInfo.startObject && endObject) {
-      const rotationDetails = getRotationDetails(cube, controls, rotateInfo.startObject, endObject);
+    if (startObject && endObject) {
+      const rotationDetails = getRotationDetails(cube, controls, startObject, endObject);
       if (rotationDetails) {
         scheduleRotation(rotationDetails);
         sound.play();
       }
-      rotateInfo.startObject = null;
+      startObject = null;
     }
 
     controls.enabled = true;

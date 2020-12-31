@@ -1,4 +1,5 @@
 import {
+  AmbientLight,
   Audio,
   AudioListener,
   AudioLoader,
@@ -6,6 +7,7 @@ import {
   Color,
   PerspectiveCamera,
   Scene,
+  SpotLight,
   WebGLRenderer
 } from 'three';
 
@@ -34,6 +36,18 @@ const initScene = () => {
   // coordinate system axes: X - red, Y - green, Z - blue
   // const axesHelper = new AxesHelper(5);
   // scene.add(axesHelper);
+
+  const light = new AmbientLight(0x999999);
+  scene.add(light);
+  const spotLight = new SpotLight(0xFFFFFF);
+  spotLight.position.set(size, size, size * 2);
+  scene.add(spotLight);
+  const spotLight2 = new SpotLight(0xFFFFFF);
+  spotLight2.position.set(size, size, size * -2);
+  scene.add(spotLight2);
+  const spotLight3 = new SpotLight(0xFFFFFF);
+  spotLight3.position.set(-1 * size, -1 * size, size * -2);
+  scene.add(spotLight3);
 
   const listener = new AudioListener();
   const sound = new Audio(listener);

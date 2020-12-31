@@ -22,7 +22,6 @@ export const scrambleInfo = {
 export const rotateInfo = {
   isRotating: false,
   rotatingSpeed: 2,
-  startObject: null,
   rotatorObject: new Object3D(),
   targetQuaternion: new Quaternion()
 };
