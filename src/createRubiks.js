@@ -2,6 +2,7 @@ import {
   BoxBufferGeometry,
   Group,
   Mesh,
+  MeshBasicMaterial,
   MeshPhongMaterial,
 } from 'three';
 
@@ -15,10 +16,10 @@ const SIZE = getCubeSize();
 const getMaterials = cubeIndex => {
   const visibleCubeFaces = getVisibleCubeFaces(SIZE);
   const faces = visibleCubeFaces[cubeIndex];
-  return COLORS.map(
-    (color, index) =>
-      new MeshPhongMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR })
-  );
+  return COLORS.map((color, index) => {
+    const parameters = { color: faces.includes(index) ? color : INSIDE_COLOR };
+    return SIZE > 6 ? new MeshBasicMaterial(parameters) : new MeshPhongMaterial(parameters);
+  });
 };
 
 export const createRubiks = () => {
