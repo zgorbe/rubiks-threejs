@@ -1,4 +1,4 @@
-# rubik-threejs
+# rubiks-threejs
 
 A visualization of the Rubik's cube using Three.js.
 [See it in action](https://zgorbe.github.io/rubik-threejs/)

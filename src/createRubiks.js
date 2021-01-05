@@ -12,10 +12,10 @@ import { getCubeSize, getVisibleCubeFaces } from './rubikUtils';
 const COLORS = [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad];
 const INSIDE_COLOR = 0x222222;
 const SIZE = getCubeSize();
+const VISIBLE_CUBE_FACES = getVisibleCubeFaces(SIZE);
 
 const getMaterials = cubeIndex => {
-  const visibleCubeFaces = getVisibleCubeFaces(SIZE);
-  const faces = visibleCubeFaces[cubeIndex];
+  const faces = VISIBLE_CUBE_FACES[cubeIndex];
   return COLORS.map((color, index) => {
     const parameters = { color: faces.includes(index) ? color : INSIDE_COLOR };
     return SIZE > 6 ? new MeshBasicMaterial(parameters) : new MeshPhongMaterial(parameters);

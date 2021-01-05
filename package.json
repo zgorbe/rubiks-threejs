@@ -1,7 +1,7 @@
 {
-  "name": "rubik-threejs",
+  "name": "rubiks-threejs",
   "version": "1.0.0",
-  "description": "Rubik's cube with three.js",
+  "description": "Rubik's cube with Three.js",
   "private": true,
   "scripts": {
     "watch": "watch 'npm run build' src",
