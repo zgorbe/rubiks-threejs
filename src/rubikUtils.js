@@ -1,4 +1,4 @@
-import { Vector3 } from 'three';
+import { MathUtils, Vector3 } from 'three';
 
 const DEFAULT_CUBE_SIZE = 3;
 
@@ -63,6 +63,11 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
         direction: getDirection(startPosition, endPosition, deltaAxis, orbitHorizontal)
       };
     }
+  } else {
+    console.log(startObject.quaternion.normalize());
+    /*console.log(MathUtils.radToDeg(startObject.rotation.x));
+    console.log(MathUtils.radToDeg(startObject.rotation.y));
+    console.log(MathUtils.radToDeg(startObject.rotation.z));*/
   }
   return null;
 };

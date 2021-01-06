@@ -1,6 +1,9 @@
 import {
   BoxBufferGeometry,
+  EdgesGeometry,
   Group,
+  LineBasicMaterial,
+  LineSegments,
   Mesh,
   MeshBasicMaterial,
   MeshPhongMaterial,
@@ -24,6 +27,10 @@ const getMaterials = cubeIndex => {
 
 export const createRubiks = () => {
   const geometry = new BoxBufferGeometry(0.96, 0.96, 0.96);
+  const edgeMaterial = new LineBasicMaterial({
+    color: INSIDE_COLOR,
+    linewidth: SIZE < 6 ? 4 : 2
+  });
 
   const mesh = new Group();
   const meshPosition = (SIZE / 2 - 0.5) * -1;
@@ -33,9 +40,16 @@ export const createRubiks = () => {
   for (let z = 0; z < SIZE; z++) {
     for (let y = 0; y < SIZE; y++) {
       for (let x = 0; x < SIZE; x++) {
-        const smallCube = new Mesh(geometry, getMaterials(index++));
+        const isVisible = !!VISIBLE_CUBE_FACES[index].length;
+        const smallCube = new Mesh(geometry, getMaterials(index));
         smallCube.position.set(x, y, z);
         mesh.add(smallCube);
+        if (isVisible) {
+          const edges = new EdgesGeometry(geometry);
+          const lines = new LineSegments(edges, edgeMaterial);
+          smallCube.add(lines);
+        }
+        index++;
       }
     }
   }
