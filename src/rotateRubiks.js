@@ -7,7 +7,7 @@ import {
 import { getCubeSize, getScrambleRotation } from './rubikUtils';
 
 const SIZE = getCubeSize();
-const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3);
+const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3) - Math.pow(SIZE - 2, 3);
 const clock = new Clock();
 
 export const scrambleInfo = {
