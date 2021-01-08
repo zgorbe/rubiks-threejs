@@ -26,7 +26,7 @@ const DEFAULT_EDGE_LINE_WIDTH = 2;
 const getMaterials = cubeIndex => {
   const faces = VISIBLE_CUBE_FACES[cubeIndex];
   return COLORS.map((color, index) =>
-    new MeshPhongMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR })
+    new MeshPhongMaterial({ color: faces.includes(index) ? color : INSIDE_COLOR, shininess: 50 })
   );
 };
 
