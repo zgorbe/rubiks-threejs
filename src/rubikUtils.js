@@ -1,5 +1,3 @@
-import { Vector3 } from 'three';
-
 const DEFAULT_CUBE_SIZE = 3;
 
 const AXLES = ['x', 'y', 'z'];
@@ -9,12 +7,6 @@ const AXIS_TO_ROTATE_MAP = {
   y: ['x', 'z'],
   z: ['x', 'y']
 }
-
-const UNIT_VECTORS = {
-  x: new Vector3(1, 0, 0),
-  y: new Vector3(0, 1, 0),
-  z: new Vector3(0, 0, 1),
-};
 
 const DIRECTIONS_MAP = {
   x: [-1, 1],
@@ -58,8 +50,8 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
       const deltaAxis = deltaList[0];
       const axisToRotate = getAxisToRotate(deltaAxis, orbitHorizontal);
       return {
-        axis: UNIT_VECTORS[axisToRotate],
-        face: cube.children.filter(child => child.position.round()[axisToRotate] === startPosition[axisToRotate]),
+        axisToRotate,
+        layer: startPosition[axisToRotate],
         direction: getDirection(startPosition, endPosition, deltaAxis, orbitHorizontal)
       };
     }
@@ -67,14 +59,14 @@ export const getRotationDetails = (cube, orbitControls, startObject, endObject) 
   return null;
 };
 
-export const getScrambleRotation = (cube, size) => {
+export const getScrambleRotation = size => {
   const axisToRotate = AXLES[Math.floor(Math.random() * Math.floor(3))];
   const layer = Math.floor(Math.random() * Math.floor(size));
   const direction = Math.floor(Math.random() * Math.floor(2)) ? 1 : -1;
 
   return {
-    axis: UNIT_VECTORS[axisToRotate],
-    face: cube.children.filter(child => child.position.round()[axisToRotate] === layer),
+    axisToRotate,
+    layer,
     direction
   };
 };

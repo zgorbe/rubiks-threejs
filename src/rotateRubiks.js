@@ -1,7 +1,8 @@
 import {
   Clock,
   Object3D,
-  Quaternion
+  Quaternion,
+  Vector3
 } from 'three';
 
 import { getCubeSize, getScrambleRotation } from './rubikUtils';
@@ -9,6 +10,12 @@ import { getCubeSize, getScrambleRotation } from './rubikUtils';
 const SIZE = getCubeSize();
 const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3) - Math.pow(SIZE - 2, 3);
 const clock = new Clock();
+
+const UNIT_VECTORS = {
+  x: new Vector3(1, 0, 0),
+  y: new Vector3(0, 1, 0),
+  z: new Vector3(0, 0, 1),
+};
 
 export const scrambleInfo = {
   isScrambling: false,
@@ -26,14 +33,15 @@ export const rotateInfo = {
   targetQuaternion: new Quaternion()
 };
 
-export const scheduleRotation = rotation => {
-  const { axis, face, direction } = rotation;
+export const scheduleRotation = (cube, rotation) => {
+  const { axisToRotate, layer, direction } = rotation;
   const { rotatorObject, targetQuaternion } = rotateInfo;
+  const faceCubes = cube.children.filter(child => child.position.round()[axisToRotate] === layer);
 
   rotateInfo.isRotating = true;
   rotatorObject.quaternion.identity();
-  face.forEach(f => rotatorObject.attach(f));
-  targetQuaternion.setFromAxisAngle(axis, direction * (Math.PI / 2));
+  faceCubes.forEach(f => rotatorObject.attach(f));
+  targetQuaternion.setFromAxisAngle(UNIT_VECTORS[axisToRotate], direction * (Math.PI / 2));
 };
 
 export const doRotate = cube => {
@@ -57,7 +65,7 @@ export const doScramble = cube => {
   const { overlay, scrambleCount, counterText } = scrambleInfo;
   if (scrambleInfo.isScrambling && !rotateInfo.isRotating) {
     if (scrambleInfo.scrambleStep++ < scrambleCount) {
-      scheduleRotation(getScrambleRotation(cube, SIZE));
+      scheduleRotation(cube, getScrambleRotation(SIZE));
     } else {
       overlay.style.display = 'none';
       scrambleInfo.isScrambling = false;
