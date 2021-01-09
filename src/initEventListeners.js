@@ -68,7 +68,7 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
     const endObject = getSelectedObject(endVector);
 
     if (startObject && endObject) {
-      const rotationDetails = getRotationDetails(cube, controls, startObject, endObject);
+      const rotationDetails = getRotationDetails(controls, startObject, endObject);
       if (rotationDetails) {
         scheduleRotation(cube, rotationDetails);
         sound.play();

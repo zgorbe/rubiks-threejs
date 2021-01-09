@@ -37,7 +37,7 @@ const getDirection = (startPosition, endPosition, delta, orbitHorizontal) => {
   return direction * (startPosition[delta] - endPosition[delta] > 0 ? 1 : -1);
 };
 
-export const getRotationDetails = (cube, orbitControls, startObject, endObject) => {
+export const getRotationDetails = (orbitControls, startObject, endObject) => {
   const startPosition = startObject.position.round();
   const endPosition = endObject.position.round();
 
