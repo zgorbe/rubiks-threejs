@@ -4,11 +4,21 @@ import { scheduleRotation, rotateInfo, scrambleInfo } from './rotateRubiks';
 
 const raycaster = new Raycaster();
 
-export const initHtmlControls = () => {
+export const initHtmlControls = cube => {
   document.getElementById('restart-btn').addEventListener('click', () => window.location.reload());
   document.getElementById('scramble-btn').addEventListener('click', () => {
     scrambleInfo.overlay.style.display = 'block';
     scrambleInfo.isScrambling = true;
+  });
+  document.getElementById('undo-btn').addEventListener('click', () => {
+    if (rotateInfo.isRotating) {
+      return;
+    }
+
+    scheduleRotation(cube, rotateInfo.rotateHistory.pop());
+    if (!rotateInfo.rotateHistory.length) {
+      document.getElementById('undo-btn').disabled = true;
+    }
   });
 
   const sizeSelector = document.getElementById('size-select');
@@ -60,6 +70,8 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
   controls.domElement.addEventListener('touchstart', handleStartEvent);
 
   const handleEndEvent = event => {
+    const { rotateHistory } = rotateInfo;
+
     if (rotateInfo.isRotating) {
       return;
     }
@@ -71,6 +83,15 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
       const rotationDetails = getRotationDetails(controls, startObject, endObject);
       if (rotationDetails) {
         scheduleRotation(cube, rotationDetails);
+        document.getElementById('undo-btn').disabled = false;
+        rotateHistory.push({
+          axisToRotate: rotationDetails.axisToRotate,
+          layer: rotationDetails.layer,
+          direction: rotationDetails.direction * -1
+        });
+        if (rotateHistory.length > rotateInfo.maxHistoryLength) {
+          rotateHistory.shift();
+        }
         sound.play();
       }
       startObject = null;

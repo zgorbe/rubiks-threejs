@@ -10,7 +10,7 @@ const cube = createRubiks();
 scene.add(cube);
 scene.add(rotateInfo.rotatorObject);
 
-initHtmlControls();
+initHtmlControls(cube);
 
 initPointerAndTouchListeners(cube, controls, camera, sound);
 

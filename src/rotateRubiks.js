@@ -30,7 +30,9 @@ export const rotateInfo = {
   isRotating: false,
   rotatingSpeed: 2,
   rotatorObject: new Object3D(),
-  targetQuaternion: new Quaternion()
+  targetQuaternion: new Quaternion(),
+  rotateHistory: [],
+  maxHistoryLength: 20
 };
 
 export const scheduleRotation = (cube, rotation) => {
