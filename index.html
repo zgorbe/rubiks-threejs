@@ -11,6 +11,12 @@
       padding: 0;
       overflow: hidden;
     }
+    .non-selectable-text {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
   </style>
 </head>
 <body>
@@ -25,9 +31,9 @@
       <option value="8">8x8</option>
       <option value="9">9x9</option>
     </select>
-    <button id="restart-btn">Restart</button>
-    <button id="scramble-btn">Scramble</button>
-    <button id="undo-btn" disabled>Undo</button>
+    <button id="restart-btn" class="non-selectable-text">Restart</button>
+    <button id="scramble-btn" class="non-selectable-text">Scramble</button>
+    <button id="undo-btn" class="non-selectable-text" disabled>Undo</button>
   </div>
   <div id="scramble-overlay" style="display: none; position: absolute; top: 0; right: 0; bottom: 0; left: 0; opacity: .6; background-color: #CCCCCC; text-align: center;">
     <p style="padding-top: 32px;">SCRAMBLING...</p>
