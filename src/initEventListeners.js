@@ -4,24 +4,31 @@ import { scheduleRotation, rotateInfo, scrambleInfo } from './rotateRubiks';
 
 const raycaster = new Raycaster();
 
-export const initHtmlControls = cube => {
-  document.getElementById('restart-btn').addEventListener('click', () => window.location.reload());
-  document.getElementById('scramble-btn').addEventListener('click', () => {
+export const initHtmlControls = (cube, sound) => {
+  const undoButton = document.getElementById('undo-btn');
+  const restartButton = document.getElementById('restart-btn');
+  const scrambleButton = document.getElementById('scramble-btn');
+  const sizeSelector = document.getElementById('size-select');
+
+  restartButton.addEventListener('click', () => window.location.reload());
+  scrambleButton.addEventListener('click', () => {
     scrambleInfo.overlay.style.display = 'block';
     scrambleInfo.isScrambling = true;
+    rotateInfo.rotateHistory.length = 0;
+    undoButton.disabled = true;
   });
-  document.getElementById('undo-btn').addEventListener('click', () => {
+
+  undoButton.addEventListener('click', () => {
     if (rotateInfo.isRotating) {
       return;
     }
 
     scheduleRotation(cube, rotateInfo.rotateHistory.pop());
+    sound.play();
     if (!rotateInfo.rotateHistory.length) {
-      document.getElementById('undo-btn').disabled = true;
+      undoButton.disabled = true;
     }
   });
-
-  const sizeSelector = document.getElementById('size-select');
 
   sizeSelector.addEventListener('change', () => {
     const url = window.location.href.split('?')[0];
