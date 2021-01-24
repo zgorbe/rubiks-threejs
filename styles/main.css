@@ -1,0 +1,32 @@
+html, body {
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.controls {
+  padding: 20px;
+  position: absolute;
+  right: 0;
+
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#scramble-overlay {
+  background-color: #CCCCCC;
+  bottom: 0;
+  display: none;
+  left: 0;
+  opacity: .6;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 0;
+}
+
+#scramble-overlay p {
+  padding-top: 32px;
+}
