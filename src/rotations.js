@@ -20,7 +20,7 @@ const UNIT_VECTORS = {
 export const scrambleInfo = {
   isScrambling: false,
   scramblingSpeed: 20,
-  scrambleCount: SIZE < 5 ? 50 : 100,
+  scrambleCount: 100,
   scrambleStep: 0,
   overlay: document.getElementById('scramble-overlay'),
   counterText: document.getElementById('scramble-counter')

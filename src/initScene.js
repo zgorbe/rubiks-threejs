@@ -18,7 +18,7 @@ const initScene = () => {
   const size = getCubeSize();
   const scene = new Scene();
   const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(size, size, size * 2);
+  camera.position.set(size, size, size * 1.6);
 
   const renderer = new WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
