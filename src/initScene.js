@@ -18,7 +18,7 @@ const initScene = () => {
   const size = getCubeSize();
   const scene = new Scene();
   const camera = new PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-  camera.position.set(size, size, size * 1.8);
+  camera.position.set(size, size, size * 2);
 
   const renderer = new WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
@@ -31,7 +31,8 @@ const initScene = () => {
   // orbiting camera with mouse
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enablePan = false;
-  controls.enableZoom = false;
+  controls.minDistance = size * 1.5;
+  controls.maxDistance = size * 3;
 
   // coordinate system axes: X - red, Y - green, Z - blue
   // const axesHelper = new AxesHelper(5);
