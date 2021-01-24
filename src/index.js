@@ -1,7 +1,7 @@
 import initScene from './initScene';
 import { createRubiks } from './createRubiks';
 import { debounce } from './utils';
-import { doRotate, doScramble, rotateInfo } from './rotateRubiks';
+import { doRotate, doScramble, rotateInfo } from './rotations';
 import { initHtmlControls, initPointerAndTouchListeners } from './initEventListeners';
 
 const [scene, camera, renderer, controls, sound] = initScene();

@@ -8,7 +8,7 @@ import {
   MeshPhongMaterial,
 } from 'three';
 
-import { getCubeSize, getVisibleCubeFaces } from './rubikUtils';
+import { getCubeSize, getVisibleCubeFaces } from './rubiks';
 
 // red, orange, white, yellow, green, blue
 const COLORS = [0xb90000, 0xff5900, 0xffffff, 0xffd500, 0x009b48, 0x0045ad];

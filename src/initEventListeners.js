@@ -1,6 +1,6 @@
 import { Raycaster, Vector2 } from 'three';
-import { getRotationDetails } from './rubikUtils';
-import { scheduleRotation, rotateInfo, scrambleInfo } from './rotateRubiks';
+import { getRotationDetails } from './rubiks';
+import { scheduleRotation, rotateInfo, scrambleInfo } from './rotations';
 
 const raycaster = new Raycaster();
 

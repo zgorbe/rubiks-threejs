@@ -5,7 +5,7 @@ import {
   Vector3
 } from 'three';
 
-import { getCubeSize, getScrambleRotation } from './rubikUtils';
+import { getCubeSize, getScrambleRotation } from './rubiks';
 
 const SIZE = getCubeSize();
 const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3) - Math.pow(SIZE - 2, 3);
