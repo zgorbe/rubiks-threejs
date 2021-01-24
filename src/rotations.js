@@ -8,6 +8,7 @@ import {
 import { getCubeSize, getScrambleRotation } from './rubiks';
 
 const SIZE = getCubeSize();
+// small cubes on the surface = all small cubes - cubes inside
 const CUBE_CHILDREN_LENGTH = Math.pow(SIZE, 3) - Math.pow(SIZE - 2, 3);
 const clock = new Clock();
 
@@ -40,6 +41,7 @@ export const scheduleRotation = (cube, rotation) => {
   const { rotatorObject, targetQuaternion } = rotateInfo;
   const faceCubes = cube.children.filter(child => child.position.round()[axisToRotate] === layer);
 
+  // rotate with a rotator object and quaternion
   rotateInfo.isRotating = true;
   rotatorObject.quaternion.identity();
   faceCubes.forEach(f => rotatorObject.attach(f));
@@ -58,6 +60,7 @@ export const doRotate = cube => {
       rotatorObject.children.forEach(child => cube.attach(child));
     }
   }
+  // rotation is finished when all small cubes are attached to the group of cubes
   if (cube.children.length === CUBE_CHILDREN_LENGTH) {
     rotateInfo.isRotating = false;
   }

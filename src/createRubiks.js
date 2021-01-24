@@ -46,6 +46,7 @@ export const createRubiks = () => {
     for (let y = 0; y < SIZE; y++) {
       for (let x = 0; x < SIZE; x++) {
         const isVisible = !!VISIBLE_CUBE_FACES[index].length;
+        // add only visible small cubes to the group of cubes, inner small cubes are not rendered
         if (isVisible) {
           const smallCube = new Mesh(geometry, getMaterials(index));
           smallCube.position.set(x, y, z);
