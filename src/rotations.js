@@ -33,7 +33,8 @@ export const rotateInfo = {
   rotatorObject: new Object3D(),
   targetQuaternion: new Quaternion(),
   rotateHistory: [],
-  maxHistoryLength: 20
+  maxHistoryLength: 20,
+  overlay: document.getElementById('debug-overlay')
 };
 
 export const scheduleRotation = (cube, rotation) => {

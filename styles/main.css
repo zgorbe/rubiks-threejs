@@ -30,3 +30,28 @@ html, body {
 #scramble-overlay p {
   padding-top: 32px;
 }
+
+#debug-overlay {
+  background-color: lightgray;
+  border: 1px solid gray;
+  bottom: 0;
+  display: none;
+  height: 500px;
+  opacity: 0.7;
+  overflow-y: auto;
+  position: absolute;
+  right: 10px;
+  top: 50px;
+  width: 300px;
+}
+
+#debug-overlay:before {
+  background-color: lightgray;
+  border-bottom: 1px solid gray;
+  content: 'Rotation debug';
+  display: block;
+  font-weight: 500;
+  padding: 5px 0;
+  text-align: center;
+}
+

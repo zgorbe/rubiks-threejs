@@ -9,6 +9,7 @@ export const initHtmlControls = (cube, sound) => {
   const restartButton = document.getElementById('restart-btn');
   const scrambleButton = document.getElementById('scramble-btn');
   const sizeSelector = document.getElementById('size-select');
+  const debugCheckbox = document.getElementById('debug-checkbox');
 
   restartButton.addEventListener('click', () => window.location.reload());
   scrambleButton.addEventListener('click', () => {
@@ -35,6 +36,10 @@ export const initHtmlControls = (cube, sound) => {
     const queryParams = new URLSearchParams(window.location.search);
     queryParams.set('size', sizeSelector.value);
     window.location.href = `${url}?${queryParams.toString()}`;
+  });
+
+  debugCheckbox.addEventListener('change', () => {
+    rotateInfo.overlay.style.display = debugCheckbox.checked ? 'block' : 'none';
   });
 };
 
