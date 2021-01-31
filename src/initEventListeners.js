@@ -43,6 +43,24 @@ export const initHtmlControls = (cube, sound) => {
   });
 };
 
+const logRotationDebug = (controls, startObject, endObject) => {
+  const startPosition = startObject.position.round();
+  const endPosition = endObject.position.round();
+  const azimuthalAngle = Math.floor(controls.getAzimuthalAngle() * 180 / Math.PI);
+  const polarAngle = Math.floor(controls.getPolarAngle() * 180 / Math.PI);
+
+  const positions = document.createTextNode(
+    `Start:(${startPosition.x}, ${startPosition.y}, ${startPosition.z}), end:(${endPosition.x}, ${endPosition.y}, ${endPosition.z})`
+  );
+  const angles = document.createTextNode(`Azimuthal angle: ${azimuthalAngle}°, polar angle: ${polarAngle}°`);
+  const p = document.createElement('p');
+  p.appendChild(positions);
+  p.appendChild(document.createElement('br'));
+  p.appendChild(angles);
+  rotateInfo.overlay.appendChild(p);
+  rotateInfo.overlay.scrollTop = rotateInfo.overlay.scrollHeight;
+};
+
 export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
   let startObject;
 
@@ -94,6 +112,10 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
     if (startObject && endObject) {
       const rotationDetails = getRotationDetails(controls, startObject, endObject);
       if (rotationDetails) {
+        if (rotateInfo.overlay.style.display === 'block') {
+          logRotationDebug(controls, startObject, endObject);
+        }
+
         scheduleRotation(cube, rotationDetails);
         document.getElementById('undo-btn').disabled = false;
         rotateHistory.push({
