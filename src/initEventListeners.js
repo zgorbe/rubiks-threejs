@@ -1,13 +1,14 @@
 import { Raycaster, Vector2 } from 'three';
 import { getRotationDetails } from './rubiks';
-import { scheduleRotation, rotateInfo, scrambleInfo } from './rotations';
+import { scheduleFlip, scheduleRotation, rotateInfo, scrambleInfo } from './rotations';
 
 const raycaster = new Raycaster();
 
 export const initHtmlControls = (cube, sound) => {
-  const undoButton = document.getElementById('undo-btn');
   const restartButton = document.getElementById('restart-btn');
   const scrambleButton = document.getElementById('scramble-btn');
+  const undoButton = document.getElementById('undo-btn');
+  const flipButton = document.getElementById('flip-btn');
   const sizeSelector = document.getElementById('size-select');
   const debugCheckbox = document.getElementById('debug-checkbox');
 
@@ -17,6 +18,10 @@ export const initHtmlControls = (cube, sound) => {
     scrambleInfo.isScrambling = true;
     rotateInfo.rotateHistory.length = 0;
     undoButton.disabled = true;
+  });
+
+  flipButton.addEventListener('click', () => {
+    scheduleFlip(cube);
   });
 
   undoButton.addEventListener('click', () => {

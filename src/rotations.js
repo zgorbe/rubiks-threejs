@@ -49,6 +49,17 @@ export const scheduleRotation = (cube, rotation) => {
   targetQuaternion.setFromAxisAngle(UNIT_VECTORS[axisToRotate], direction * (Math.PI / 2));
 };
 
+export const scheduleFlip = cube => {
+  const { rotatorObject, targetQuaternion } = rotateInfo;
+  const faceCubes = [...cube.children];
+
+  // rotate with a rotator object and quaternion
+  rotateInfo.isRotating = true;
+  rotatorObject.quaternion.identity();
+  faceCubes.forEach(f => rotatorObject.attach(f));
+  targetQuaternion.setFromAxisAngle(UNIT_VECTORS['x'], Math.PI);
+};
+
 export const doRotate = cube => {
   const { rotatorObject, targetQuaternion, rotatingSpeed } = rotateInfo;
   const delta = clock.getDelta();
