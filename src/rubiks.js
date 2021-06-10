@@ -2,61 +2,53 @@ const DEFAULT_CUBE_SIZE = 3;
 
 const AXLES = ['x', 'y', 'z'];
 
-const AXIS_TO_ROTATE_MAP = {
-  x: ['y', 'z'],
-  y: ['x', 'z'],
-  z: ['x', 'y']
-}
+const DELTA_THRESHOLD = 50;
 
-const DIRECTIONS_MAP = {
-  x: [-1, 1],
-  y: [1, -1],
-  z: [-1, 1]
-};
-
-const getDeltaList = (vectorA, vectorB) => {
-  let delta = [];
-
-  if (vectorA.x !== vectorB.x) delta.push('x');
-  if (vectorA.y !== vectorB.y) delta.push('y');
-  if (vectorA.z !== vectorB.z) delta.push('z');
-
-  return delta;
-};
-
-// TODO: review and implement a better solution for rotations
-const getAxisToRotate = (deltaAxis, orbitHorizontal) => {
-  const axles = AXIS_TO_ROTATE_MAP[deltaAxis];
-  return Math.abs(orbitHorizontal) < 45 || Math.abs(orbitHorizontal) > 135 ? axles[0] : axles[1];
-};
-
-const getDirection = (startPosition, endPosition, delta, orbitHorizontal) => {
-  const directions = DIRECTIONS_MAP[delta];
-  const direction = -135 < orbitHorizontal && orbitHorizontal < 45 ? directions[0] : directions[1];
-
-  return direction * (startPosition[delta] - endPosition[delta] > 0 ? 1 : -1);
-};
-
-export const getRotationDetails = (orbitControls, startObject, endObject) => {
-  const startPosition = startObject.position.round();
-  const endPosition = endObject.position.round();
-
-  if (!startPosition.equals(endPosition)) {
-    const deltaList = getDeltaList(startPosition, endPosition);
-
-    // if start and end objects are on same face
-    if (deltaList.length === 1) {
-      const orbitHorizontal = orbitControls.getAzimuthalAngle() * 180 / Math.PI;
-      const deltaAxis = deltaList[0];
-      const axisToRotate = getAxisToRotate(deltaAxis, orbitHorizontal);
-      return {
-        axisToRotate,
-        layer: startPosition[axisToRotate],
-        direction: getDirection(startPosition, endPosition, deltaAxis, orbitHorizontal)
-      };
-    }
+const getAxisToRotate = (absDeltaX, absDeltaY, orbitHorizontal) => {
+  console.log(orbitHorizontal, absDeltaX, absDeltaY);
+  if (-45 < orbitHorizontal && orbitHorizontal < 45) {
+    return absDeltaX > absDeltaY ? 'y' : 'x';
   }
-  return null;
+
+  if (45 <= orbitHorizontal && orbitHorizontal < 135) {
+    return absDeltaX > absDeltaY ? 'x' : 'z';
+  }
+
+  return absDeltaX > absDeltaY ? 'x' : 'y';
+};
+
+export const getRotationDetails = (orbitControls, startObject, startCoordinates, endCoordinates) => {
+  const startPosition = startObject.position.round();
+
+  const deltaX = endCoordinates.x - startCoordinates.x;
+  const deltaY = endCoordinates.y - startCoordinates.y;
+
+  if (Math.abs(deltaX) < DELTA_THRESHOLD && Math.abs(deltaY) < DELTA_THRESHOLD) {
+    return null;
+  }
+
+  const orbitHorizontal = orbitControls.getAzimuthalAngle() * 180 / Math.PI;
+  const axisToRotate = getAxisToRotate(Math.abs(deltaX), Math.abs(deltaY), orbitHorizontal);
+
+  const direction = (() => {
+    if (axisToRotate === 'x') {
+      return Math.sign(deltaY);
+    }
+
+    if (axisToRotate === 'y') {
+      return Math.sign(deltaX);
+    }
+
+    if (axisToRotate === 'z') {
+      return Math.sign(deltaY) * -1;
+    }
+  })();
+
+  return {
+    axisToRotate,
+    layer: startPosition[axisToRotate],
+    direction
+  };
 };
 
 export const getScrambleRotation = size => {

@@ -35,8 +35,8 @@ const initScene = () => {
   controls.maxDistance = size * 3;
 
   // coordinate system axes: X - red, Y - green, Z - blue
-  // const axesHelper = new AxesHelper(5);
-  // scene.add(axesHelper);
+  const axesHelper = new AxesHelper(5);
+  scene.add(axesHelper);
 
   const light = new AmbientLight(0x555555);
   scene.add(light);

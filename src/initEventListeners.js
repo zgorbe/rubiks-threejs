@@ -62,11 +62,13 @@ const logRotationDebug = (controls, startObject, endObject) => {
 };
 
 export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
+  const startCoordinates = new Vector2();
+  const endCoordinates = new Vector2();
   let startObject;
 
-  const getSelectedObject = mouseVector => {
-    if (mouseVector && mouseVector.x !== 0 && mouseVector.y !== 0) {
-      raycaster.setFromCamera(mouseVector, camera);
+  const getSelectedObject = vector => {
+    if (vector && vector.x !== 0 && vector.y !== 0) {
+      raycaster.setFromCamera(vector, camera);
       let intersects = raycaster.intersectObjects(cube.children);
 
       if (intersects.length) {
@@ -77,10 +79,11 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
     return null;
   };
 
-  const getEventVector = event => {
+  const getEventObject = event =>
+    event.changedTouches && event.changedTouches.length ? event.changedTouches[0] : event;
+
+  const getEventVector = eventObj => {
     const eventVector = new Vector2();
-    const eventObj =
-      event.changedTouches && event.changedTouches.length ? event.changedTouches[0] : event;
 
     eventVector.x = (eventObj.clientX / window.innerWidth) * 2 - 1;
     eventVector.y = -(eventObj.clientY / window.innerHeight) * 2 + 1;
@@ -92,9 +95,16 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
       return;
     }
 
-    const startVector = getEventVector(event);
+    const eventObj = getEventObject(event);
+    const startVector = getEventVector(eventObj);
     startObject = getSelectedObject(startVector);
+
     controls.enabled = !startObject;
+
+    if (startObject) {
+      startCoordinates.x = eventObj.screenX;
+      startCoordinates.y = eventObj.screenY;
+    }
   };
   controls.domElement.addEventListener('pointerdown', handleStartEvent);
   controls.domElement.addEventListener('touchstart', handleStartEvent);
@@ -106,11 +116,12 @@ export const initPointerAndTouchListeners = (cube, controls, camera, sound) => {
       return;
     }
 
-    const endVector = getEventVector(event);
-    const endObject = getSelectedObject(endVector);
+    const eventObj = getEventObject(event);
+    endCoordinates.x = eventObj.screenX;
+    endCoordinates.y = eventObj.screenY;
 
-    if (startObject && endObject) {
-      const rotationDetails = getRotationDetails(controls, startObject, endObject);
+    if (startObject) {
+      const rotationDetails = getRotationDetails(controls, startObject, startCoordinates, endCoordinates);
       if (rotationDetails) {
         if (rotateInfo.overlay.style.display === 'block') {
           logRotationDebug(controls, startObject, endObject);
